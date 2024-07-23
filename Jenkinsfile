@@ -71,10 +71,6 @@ pipeline {
         }
         stage("Upload Artifact") {
             steps {
-                sh """
-                cd backend/
-                ls -ltr
-                """
                 script {
                     nexusArtifactUploader(
                         nexusVersion: 'nexus3',
