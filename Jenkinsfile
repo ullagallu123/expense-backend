@@ -61,6 +61,7 @@ pipeline {
                     def zipFileName = "backend-${env.APP_VERSION}-${env.BUILD_NUMBER}.zip"
                     sh """
                     zip -q -r ${zipFileName} * -x Jenkinsfile -x ${zipFileName} -x Dockerfile -x backend.pkr.hcl
+                    ls -ltr 
                     """
                 }
             }
