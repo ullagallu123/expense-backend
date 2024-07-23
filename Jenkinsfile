@@ -9,7 +9,7 @@ pipeline {
     }
     environment {
         PATH = "${HOME}/.nvm/versions/node/v20.15.1/bin:${env.PATH}"
-        nexusUrl = 'http://65.0.127.21:8081'
+        nexusUrl = '65.0.127.21:8081'
     }
     stages {
         stage("Node Versions Checking") {
