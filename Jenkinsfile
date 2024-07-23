@@ -29,16 +29,16 @@ pipeline {
                 }
             }
         }
-        stage("git checkout"){
-            steps{
-                git branch: 'main', url: 'https://github.com/ullagallu123/expense.git'
-            }
-        }
+        // stage("git checkout"){
+        //     steps{
+        //         git branch: 'main', url: 'https://github.com/ullagallu123/expense.git'
+        //     }
+        // }
         stage("Reading app version") {
             steps {
                 script {
                     // Read the package.json file and get the version
-                    def packageJson = readJSON file: 'backend/package.json'
+                    def packageJson = readJSON file: 'package.json'
                     env.APP_VERSION = packageJson.version
                     echo "Application version: ${env.APP_VERSION}"
                 }
@@ -48,7 +48,6 @@ pipeline {
             steps {
                 script {
                     sh """
-                    cd backend/
                     npm install
                     ls -ltr
                     echo "Application version: ${env.APP_VERSION}"
@@ -61,7 +60,6 @@ pipeline {
                 script {
                     def zipFileName = "backend-${env.APP_VERSION}.zip"
                     sh """
-                    cd backend
                     zip -q -r ${zipFileName} * -x Jenkinsfile -x ${zipFileName} -x Dockerfile -x backend.pkr.hcl
                     mv ${zipFileName} ../
                     ls -ltr ../${zipFileName}
