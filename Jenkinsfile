@@ -15,7 +15,7 @@ pipeline {
         stage("Reading app version") {
             steps {
                 script {
-                    def packageJson = readJSON file: 'backend/package.json'
+                    def packageJson = readJSON file: 'package.json'
                     env.APP_VERSION = packageJson.version
                     echo "Application version: ${env.APP_VERSION}"
                 }
@@ -25,7 +25,6 @@ pipeline {
             steps {
                 script {
                     sh """
-                    cd backend/
                     npm install
                     ls -ltr
                     echo "Application version: ${env.APP_VERSION}"
@@ -38,10 +37,8 @@ pipeline {
                 script {
                     def zipFileName = "backend-${env.APP_VERSION}-${env.BUILD_NUMBER}.zip"
                     sh """
-                    cd backend
                     zip -q -r ${zipFileName} * -x Jenkinsfile -x ${zipFileName} -x Dockerfile -x backend.pkr.hcl
-                    mv ${zipFileName} ../
-                    ls -ltr ../${zipFileName}
+                    ls -ltr
                     """
                 }
             }
