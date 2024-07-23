@@ -12,28 +12,28 @@ pipeline {
         nexusUrl = 'http://65.0.127.21:8081'
     }
     stages {
-        // stage("Node Versions Checking") {
-        //     steps {
-        //         script {
-        //             try {
-        //                 sh '''
-        //                 echo "Checking Node.js version:"
-        //                 node -v
-        //                 echo "Checking npm version:"
-        //                 npm -v
-        //                 '''
-        //             } catch (Exception e) {
-        //                 echo "Node.js or npm is not available."
-        //                 throw e
-        //             }
-        //         }
-        //     }
-        // }
-        // stage("git checkout"){
-        //     steps{
-        //         git branch: 'main', url: 'https://github.com/ullagallu123/expense.git'
-        //     }
-        // }
+        stage("Node Versions Checking") {
+            steps {
+                script {
+                    try {
+                        sh '''
+                        echo "Checking Node.js version:"
+                        node -v
+                        echo "Checking npm version:"
+                        npm -v
+                        '''
+                    } catch (Exception e) {
+                        echo "Node.js or npm is not available."
+                        throw e
+                    }
+                }
+            }
+        }
+        stage("git checkout"){
+            steps{
+                git branch: 'main', url: 'https://github.com/ullagallu123/expense.git'
+            }
+        }
         stage("Reading app version") {
             steps {
                 script {
