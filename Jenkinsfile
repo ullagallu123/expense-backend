@@ -36,6 +36,8 @@ pipeline {
             steps {
                 script {
                     def zipFileName = "backend-${env.APP_VERSION}-${env.BUILD_NUMBER}.zip"
+                    echo "Build number: ${env.BUILD_NUMBER}"
+                    echo "Zip file name: ${zipFileName}"
                     sh """
                     zip -q -r ${zipFileName} * -x Jenkinsfile -x ${zipFileName} -x Dockerfile -x backend.pkr.hcl
                     ls -ltr
@@ -49,21 +51,28 @@ pipeline {
                 ls -ltr
                 """
                 script {
-                    nexusArtifactUploader(
-                        nexusVersion: 'nexus3',
-                        protocol: 'http',
-                        nexusUrl: "${nexusUrl}",
-                        groupId: 'com.expense',
-                        version: "${env.APP_VERSION}",
-                        repository: 'backend',
-                        credentialsId: 'nexus-auth',
-                        artifacts: [
-                            [artifactId: 'backend',
-                            classifier: '',
-                            file: "backend-${env.APP_VERSION}-${env.BUILD_NUMBER}.zip",
-                            type: 'zip']
-                        ]
-                    )
+                    echo "Uploading artifact to Nexus..."
+                    try {
+                        nexusArtifactUploader(
+                            nexusVersion: 'nexus3',
+                            protocol: 'http',
+                            nexusUrl: "${nexusUrl}",
+                            groupId: 'com.expense',
+                            version: "${env.APP_VERSION}",
+                            repository: 'backend',
+                            credentialsId: 'nexus-auth',
+                            artifacts: [
+                                [artifactId: 'backend',
+                                classifier: '',
+                                file: "backend-${env.APP_VERSION}-${env.BUILD_NUMBER}.zip",
+                                type: 'zip']
+                            ]
+                        )
+                        echo "Artifact upload completed."
+                    } catch (Exception e) {
+                        echo "Artifact upload failed: ${e.getMessage()}"
+                        throw e
+                    }
                 }
             }
         }
